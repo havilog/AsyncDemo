@@ -25,6 +25,7 @@ final class LoginViewController: UIViewController {
     }()
     
     private let network: HaviNetwork = .init()
+    private let storage: TokenStorage = .init()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,41 +57,129 @@ final class LoginViewController: UIViewController {
     
     @objc
     private func login() {
-        print("hi")
+        loginWithCompletion()
     }
 }
 
-struct HaviNetwork {
-    func fetch<Model: Decodable>(
-        endpoint: Endpoint, 
-        completion: @Sendable @escaping (Result<Model, Error>) -> Void
-    ) {
-        // request는 대충 만들거에요
-        let url: URL = .init(string: endpoint.urlString)!
-        let request: URLRequest = .init(url: url)
+// MARK: completion
+
+extension LoginViewController {
+    func loginWithCompletion() {
+        var kakaoToken: KakaoToken?
+        var register: Register?
         
-        URLSession.shared.dataTask(with: request) { data, _, error in
-            if let error = error {
-                completion(.failure(error))
-                // 이런 곳에서 return을 빼먹을 수 있음
+        let group = DispatchGroup()
+        
+        group.enter()
+        haviRegister { result in
+            print("register login")
+            group.leave()
+            switch result {
+            case .success(let success):
+                register = success
+            case .failure:
+                register = nil
+            }
+        } 
+        
+        group.enter()
+        kakaoLogin { result in
+            print("kakao login")
+            group.leave()
+            switch result {
+            case .success(let success):
+                kakaoToken = success
+            case .failure:
+                kakaoToken = nil
+            }
+        }
+        
+        group.notify(queue: .global()) { [weak self] in
+            print("kakao login, havi register 끝남")
+            guard let kakaoToken = kakaoToken, let register = register else {
+                DispatchQueue.main.async {
+                    self?.textLabel.text = "에러에러 ㅠㅠ"
+                }
                 return
             }
-            
-            guard let data = data else {
-                completion(.failure(NSError.init(domain: "havi", code: 123)))
-                return
-            }
-            
-            do {
-                let result = try JSONDecoder().decode(Model.self, from: data)
-                completion(.success(result))
-            }
-            catch {
-                completion(.failure(error))
+            self?.haviLogin(kakaoToken: kakaoToken, register: register) { result in
+                switch result {
+                case let .success(result):
+                    print("havi login success")
+                    self?.storage.save(token: result) { _ in
+                        DispatchQueue.main.async {
+                            self?.textLabel.text = "로그인 성공성공~"
+                        }
+                    }
+                case .failure:
+                    DispatchQueue.main.async {
+                        self?.textLabel.text = "에러에러 ㅠㅠ"
+                    }
+                }
             }
         }
     }
 }
+
+extension LoginViewController {
+    private func kakaoLogin(completion: @escaping (Result<KakaoToken, Error>) -> Void) {
+        network.fetch(endpoint: .kakaoToken, delay: .now() + 1) { _ in
+            completion(.success(.init(accessToken: "123", refreshToken: "456")))
+        }
+    }
+
+    private func haviRegister(completion: @escaping (Result<Register, Error>) -> Void) {
+        network.fetch(endpoint: .register, delay: .now() + 1) { _ in
+            completion(.success(.init()))    
+        }
+    }
+
+    private func haviLogin(
+        kakaoToken: KakaoToken, 
+        register: Register,
+        completion: @escaping (Result<HaviToken, Error>) -> Void
+    ) {
+        network.fetch(endpoint: .haviToken, delay: .now() + 1) { _ in
+            completion(.success(.init(accessToken: "123", refreshToken: "456")))    
+        }
+    }
+}
+
+// MARK: storage
+
+final class TokenStorage {
+    /// data race를 방지하려면
+    /// 1. serial + sync
+    /// 2. ConcurrentQueue + DispatchBarrier
+    /// 3. NSLock
+    /// 4. DispatchSemaphore
+    /// 중 택 1
+    private let tokenQueue: DispatchQueue = .init(label: "token_saving_serial_queue") // default = serial
+    private var cache: [String: HaviToken] = .init()
+    
+    func save(token: HaviToken, completion: @escaping (()) -> Void) {
+        tokenQueue.sync { [weak self] in
+            self?.cache["havi_token"] = token
+            completion(())
+        }
+    }
+}
+
+// MARK: network
+
+struct HaviNetwork {
+    func fetch(
+        endpoint: Endpoint,
+        delay: DispatchTime,
+        completion: @escaping (Result<Void, Error>) -> Void
+    ) {
+        DispatchQueue.global().asyncAfter(deadline: delay) {
+            completion(.success(()))
+        }
+    }
+}
+
+// MARK: model
 
 enum Endpoint {
     case kakaoToken
@@ -98,8 +187,14 @@ enum Endpoint {
     case haviToken
 }
 
-extension Endpoint {
-    var urlString: String {
-        return "havi ZZang"
-    }
+struct KakaoToken: Decodable, Sendable {
+    let accessToken: String
+    let refreshToken: String
+}
+
+struct Register: Decodable { }
+
+struct HaviToken: Decodable, Sendable {
+    let accessToken: String
+    let refreshToken: String
 }
