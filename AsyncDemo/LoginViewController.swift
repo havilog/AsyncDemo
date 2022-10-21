@@ -59,13 +59,22 @@ final class LoginViewController: UIViewController {
 //        loginButton.addTarget(self, action: #selector(login), for: .touchUpInside)
         loginButton.rx.tap
             .subscribe(onNext: { [weak self] in
-                self?.loginRxSwift()
+                self?.login()
             })
             .disposed(by: disposeBag)
     }
     
     @objc
     private func login() {
+        Task { @MainActor in
+            do {
+                try await loginAsync()
+                textLabel.text = "로그인 성공성공~"
+            }
+            catch {
+                textLabel.text = "오류오류 ㅠㅠ"
+            }
+        }
 //        loginWithCompletion()
     }
 }
@@ -196,6 +205,35 @@ extension LoginViewController {
     }
 }
 
+// MARK: async
+
+extension LoginViewController {
+    private func loginAsync() async throws {
+        async let kakaoToken = try await kakaoLogin()
+        async let register = try await haviRegister()
+        let haviToken = try await haviLogin(token: kakaoToken, register: register)
+        try await storage.save(token: haviToken).asSingle().value
+    }
+    
+    private func kakaoLogin() async throws -> KakaoToken {
+        _ = try await network.fetch(endpoint: .kakaoToken, delay: NSEC_PER_SEC)
+        print(#function)
+        return KakaoToken.init(accessToken: "!23", refreshToken: "123")
+    }
+    
+    private func haviRegister() async throws -> Register {
+        _ = try await network.fetch(endpoint: .register, delay: NSEC_PER_SEC * 2)
+        print(#function)
+        return .init()
+    }
+    
+    private func haviLogin(token: KakaoToken, register: Register) async throws  -> HaviToken {
+        _ = try await network.fetch(endpoint: .haviToken, delay: NSEC_PER_SEC / 2)
+        print(#function)
+        return .init(accessToken: "123", refreshToken: "!234")
+    }
+}
+
 // MARK: storage
 
 final class TokenStorage {
@@ -219,7 +257,9 @@ final class TokenStorage {
         return .create { [weak self] observer in
             self?.tokenQueue.sync {
                 self?.cache["havi_token"] = token
+                print("havi token saved")
                 observer.onNext(())
+                observer.onCompleted()
             }
             
             return Disposables.create()
@@ -247,9 +287,18 @@ struct HaviNetwork {
         return .create { observer in
             DispatchQueue.global().asyncAfter(deadline: delay) {
                 observer.onNext(())
+                observer.onCompleted()
             }
             return Disposables.create()
         }
+    }
+    
+    func fetch(
+        endpoint: Endpoint,
+        delay: UInt64
+    ) async throws -> Void {
+        try? await Task.sleep(nanoseconds: delay)
+        return
     }
 }
 
