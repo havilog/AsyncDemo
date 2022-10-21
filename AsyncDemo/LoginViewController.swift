@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 final class LoginViewController: UIViewController {
     
@@ -26,6 +28,8 @@ final class LoginViewController: UIViewController {
     
     private let network: HaviNetwork = .init()
     private let storage: TokenStorage = .init()
+    
+    private var disposeBag: DisposeBag = .init()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,19 +56,24 @@ final class LoginViewController: UIViewController {
     }
     
     private func bind() {
-        loginButton.addTarget(self, action: #selector(login), for: .touchUpInside)
+//        loginButton.addTarget(self, action: #selector(login), for: .touchUpInside)
+        loginButton.rx.tap
+            .subscribe(onNext: { [weak self] in
+                self?.loginRxSwift()
+            })
+            .disposed(by: disposeBag)
     }
     
     @objc
     private func login() {
-        loginWithCompletion()
+//        loginWithCompletion()
     }
 }
 
 // MARK: completion
 
 extension LoginViewController {
-    func loginWithCompletion() {
+    private func loginWithCompletion() {
         var kakaoToken: KakaoToken?
         var register: Register?
         
@@ -145,6 +154,48 @@ extension LoginViewController {
     }
 }
 
+// MARK: rxswift
+
+extension LoginViewController {
+    private func loginRxSwift() {
+        Observable.zip(kakaoLogin(), haviRegister())
+            .subscribe(on: ConcurrentDispatchQueueScheduler(qos: .userInitiated))
+            .flatMapLatest { [weak self] kakaoToken, register -> Observable<HaviToken> in
+                guard let self = self else { return .empty() }
+                return self.haviLogin(token: kakaoToken, register: register)
+            }
+            .flatMapLatest { [weak self] haviToken -> Observable<Void> in
+                guard let self = self else { return .empty() }
+                return self.storage.save(token: haviToken)
+            }
+            .observe(on: MainScheduler.instance)
+            .subscribe(
+                onNext: { [weak self] haviToken in
+                    self?.textLabel.text = "로그인 성공성공~"
+                },
+                onError: { [weak self] _ in
+                    self?.textLabel.text = "에러에러 ㅠㅠ"
+                }
+            )
+            .disposed(by: disposeBag)
+    }
+    
+    private func kakaoLogin() -> Observable<KakaoToken> {
+        return network.fetch(endpoint: .kakaoToken, delay: .now() + 1)
+            .map { _ in return KakaoToken.init(accessToken: "!23", refreshToken: "123") }
+    }
+    
+    private func haviRegister() -> Observable<Register> {
+        return network.fetch(endpoint: .register, delay: .now() + 2)
+            .map { _ in return Register() }
+    }
+    
+    private func haviLogin(token: KakaoToken, register: Register) -> Observable<HaviToken> {
+        return network.fetch(endpoint: .haviToken, delay: .now() + 0.5)
+            .map { _ in return HaviToken.init(accessToken: "!23", refreshToken: "123") }
+    }
+}
+
 // MARK: storage
 
 final class TokenStorage {
@@ -163,6 +214,17 @@ final class TokenStorage {
             completion(())
         }
     }
+    
+    func save(token: HaviToken) -> Observable<Void> {
+        return .create { [weak self] observer in
+            self?.tokenQueue.sync {
+                self?.cache["havi_token"] = token
+                observer.onNext(())
+            }
+            
+            return Disposables.create()
+        } 
+    }
 }
 
 // MARK: network
@@ -175,6 +237,18 @@ struct HaviNetwork {
     ) {
         DispatchQueue.global().asyncAfter(deadline: delay) {
             completion(.success(()))
+        }
+    }
+    
+    func fetch(
+        endpoint: Endpoint,
+        delay: DispatchTime
+    ) -> Observable<Void> {
+        return .create { observer in
+            DispatchQueue.global().asyncAfter(deadline: delay) {
+                observer.onNext(())
+            }
+            return Disposables.create()
         }
     }
 }
