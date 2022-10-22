@@ -19,7 +19,7 @@ protocol NetworkMockable {
     func fetch<Model: Decodable>(
         endpoint: Endpoint,
         mock: Model,
-        delay: UInt64
+        delay: DispatchTime
     ) async throws -> Model
     
     func fetch<Model: Decodable>(
@@ -44,11 +44,29 @@ extension NetworkMockable {
     func fetch<Model: Decodable>(
         endpoint: Endpoint,
         mock: Model,
-        delay: UInt64
+        delay: DispatchTime
     ) async throws -> Model {
-        try await Task.sleep(nanoseconds: delay)
-        return mock
+        return try await withCheckedThrowingContinuation { continuation in
+            fetch(endpoint: endpoint, mock: mock, delay: delay) { result in
+                continuation.resume(with: result)
+//                switch result {
+//                case let .success(model):
+//                    continuation.resume(returning: model)
+//                case let .failure(error):
+//                    continuation.resume(throwing: error)
+//                }
+            }
+        }
     }
+    
+//    func fetch<Model: Decodable>(
+//        endpoint: Endpoint,
+//        mock: Model,
+//        delay: UInt64
+//    ) async throws -> Model {
+//        try await Task.sleep(nanoseconds: delay)
+//        return mock
+//    }
     
     func fetch<Model: Decodable>(
         endpoint: Endpoint,
