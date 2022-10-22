@@ -62,9 +62,8 @@ extension HaviLoginable {
             ) { result in
                 switch result {
                 case let .success(haviToken):
-                    tokenStorage.save(token: haviToken) { _ in
-                        completion(.success(()))
-                    }
+                    tokenStorage.save(token: haviToken)
+                    completion(.success(()))
                 case let .failure(error):
                     completion(.failure(error))
                 }
