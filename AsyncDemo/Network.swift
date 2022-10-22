@@ -14,6 +14,12 @@ protocol NetworkMockable {
         delay: DispatchTime,
         completion: @escaping (Result<Model, Error>) -> Void
     )
+    
+    func fetch<Model: Decodable>(
+        endpoint: Endpoint,
+        mock: Model,
+        delay: UInt64
+    ) async throws -> Model
 }
 
 extension NetworkMockable {
@@ -26,6 +32,15 @@ extension NetworkMockable {
         DispatchQueue.global().asyncAfter(deadline: delay) {
             completion(.success(mock))
         }
+    }
+    
+    func fetch<Model: Decodable>(
+        endpoint: Endpoint,
+        mock: Model,
+        delay: UInt64
+    ) async throws -> Model {
+        try await Task.sleep(nanoseconds: delay)
+        return mock
     }
 }
 

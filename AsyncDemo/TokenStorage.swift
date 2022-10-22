@@ -8,7 +8,8 @@
 import Foundation
 
 protocol TokenSavable {
-    func save(token: HaviToken, completion: @escaping (Result<Void, Error>) -> Void)
+    func save(token: HaviToken, completion: @escaping (()) -> Void)
+    func save(token: HaviToken) async
     func token() throws -> HaviToken
 }
 
@@ -30,15 +31,23 @@ final class TokenStorage: TokenSavable {
     private let tokenQueue: DispatchQueue = .init(label: "token_saving_serial_queue")
     private var tokenCache: [String: HaviToken] = .init()
     
-    func save(token: HaviToken, completion: @escaping (Result<Void, Error>) -> Void) {
+    func save(token: HaviToken, completion: @escaping (()) -> Void) {
         tokenQueue.sync { [weak self] in
-            defer { completion(.success(())) }
+            defer { completion(()) }
+            self?.tokenCache["havi_token"] = token
+        }
+    }
+    
+    func save(token: HaviToken) async {
+        tokenQueue.sync { [weak self] in
             self?.tokenCache["havi_token"] = token
         }
     }
     
     func token() throws -> HaviToken {
-        guard let token = tokenCache["havi_token"] else { throw TokenError.empty }
-        return token
+        return try tokenQueue.sync { [weak self] in
+            guard let token = self?.tokenCache["havi_token"] else { throw TokenError.empty }
+            return token
+        }
     }
 }

@@ -17,6 +17,9 @@
 		40DC6A122903C5FA00B37B2D /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40DC6A112903C5FA00B37B2D /* Model.swift */; };
 		40DC6A142903CA7800B37B2D /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40DC6A132903CA7800B37B2D /* Network.swift */; };
 		40DC6A162903E82700B37B2D /* TokenStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40DC6A152903E82700B37B2D /* TokenStorage.swift */; };
+		40DC6A192903F9FF00B37B2D /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 40DC6A182903F9FF00B37B2D /* RxCocoa */; };
+		40DC6A1B2903F9FF00B37B2D /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 40DC6A1A2903F9FF00B37B2D /* RxSwift */; };
+		40DC6A1D2903FB3C00B37B2D /* LoginAsync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40DC6A1C2903FB3C00B37B2D /* LoginAsync.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +46,7 @@
 		40DC6A112903C5FA00B37B2D /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		40DC6A132903CA7800B37B2D /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		40DC6A152903E82700B37B2D /* TokenStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenStorage.swift; sourceTree = "<group>"; };
+		40DC6A1C2903FB3C00B37B2D /* LoginAsync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginAsync.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,6 +54,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				40DC6A1B2903F9FF00B37B2D /* RxSwift in Frameworks */,
+				40DC6A192903F9FF00B37B2D /* RxCocoa in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -91,6 +97,7 @@
 				403656F828FDA7C70023BEDB /* LaunchScreen.storyboard */,
 				403656FB28FDA7C70023BEDB /* Info.plist */,
 				40DC6A0F2903C5C200B37B2D /* LoginCompletion.swift */,
+				40DC6A1C2903FB3C00B37B2D /* LoginAsync.swift */,
 				40DC6A112903C5FA00B37B2D /* Model.swift */,
 				40DC6A132903CA7800B37B2D /* Network.swift */,
 				40DC6A152903E82700B37B2D /* TokenStorage.swift */,
@@ -122,6 +129,10 @@
 			dependencies = (
 			);
 			name = AsyncDemo;
+			packageProductDependencies = (
+				40DC6A182903F9FF00B37B2D /* RxCocoa */,
+				40DC6A1A2903F9FF00B37B2D /* RxSwift */,
+			);
 			productName = AsyncDemo;
 			productReference = 403656EA28FDA7C50023BEDB /* AsyncDemo.app */;
 			productType = "com.apple.product-type.application";
@@ -172,6 +183,9 @@
 				Base,
 			);
 			mainGroup = 403656E128FDA7C50023BEDB;
+			packageReferences = (
+				40DC6A172903F9FF00B37B2D /* XCRemoteSwiftPackageReference "RxSwift" */,
+			);
 			productRefGroup = 403656EB28FDA7C50023BEDB /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -208,6 +222,7 @@
 			files = (
 				40DC6A122903C5FA00B37B2D /* Model.swift in Sources */,
 				403656F228FDA7C50023BEDB /* LoginViewController.swift in Sources */,
+				40DC6A1D2903FB3C00B37B2D /* LoginAsync.swift in Sources */,
 				40DC6A142903CA7800B37B2D /* Network.swift in Sources */,
 				40DC6A162903E82700B37B2D /* TokenStorage.swift in Sources */,
 				403656EE28FDA7C50023BEDB /* AppDelegate.swift in Sources */,
@@ -495,6 +510,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		40DC6A172903F9FF00B37B2D /* XCRemoteSwiftPackageReference "RxSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ReactiveX/RxSwift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		40DC6A182903F9FF00B37B2D /* RxCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 40DC6A172903F9FF00B37B2D /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxCocoa;
+		};
+		40DC6A1A2903F9FF00B37B2D /* RxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 40DC6A172903F9FF00B37B2D /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 403656E228FDA7C50023BEDB /* Project object */;
 }
