@@ -46,4 +46,40 @@ extension HaviRxLoginable {
         defer { print("havi login start") }
         return network.fetch(endpoint: .haviToken, mock: HaviToken.mock, delay: .now() + 1)
     }
+    
+    func loginRxToAsync() async throws {
+        try await loginRxSwift().value
+    }
+}
+
+extension ObservableType {
+    var value: Element {
+        get async throws {
+            let disposable = SingleAssignmentDisposable()
+            return try await withTaskCancellationHandler(
+                operation: { 
+                    try await withCheckedThrowingContinuation { continuation in
+                        var didResume: Bool = false
+                        disposable.setDisposable(
+                            self.subscribe(
+                                onNext: { element in
+                                    guard didResume == false else { return }
+                                    continuation.resume(returning: element)
+                                    didResume = true
+                                }, 
+                                onError: { error in
+                                    guard didResume == false else { return }
+                                    continuation.resume(throwing: error)
+                                    didResume = true
+                                }
+                            )
+                        )
+                    }
+                }, 
+                onCancel: { [disposable] in 
+                    disposable.dispose()
+                }
+            )
+        }
+    }
 }
