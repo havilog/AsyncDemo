@@ -7,7 +7,16 @@
 
 import Foundation
 
-struct Network {
+protocol NetworkMockable {
+    func fetch<Model: Decodable>(
+        endpoint: Endpoint,
+        mock: Model,
+        delay: DispatchTime,
+        completion: @escaping (Result<Model, Error>) -> Void
+    )
+}
+
+extension NetworkMockable {
     func fetch<Model: Decodable>(
         endpoint: Endpoint,
         mock: Model,
@@ -19,3 +28,5 @@ struct Network {
         }
     }
 }
+
+struct NetworkMock: NetworkMockable { }
