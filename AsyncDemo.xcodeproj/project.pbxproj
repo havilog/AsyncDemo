@@ -16,6 +16,7 @@
 		40DC6A102903C5C200B37B2D /* LoginCompletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40DC6A0F2903C5C200B37B2D /* LoginCompletion.swift */; };
 		40DC6A122903C5FA00B37B2D /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40DC6A112903C5FA00B37B2D /* Model.swift */; };
 		40DC6A142903CA7800B37B2D /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40DC6A132903CA7800B37B2D /* Network.swift */; };
+		40DC6A162903E82700B37B2D /* TokenStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40DC6A152903E82700B37B2D /* TokenStorage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,6 +42,7 @@
 		40DC6A0F2903C5C200B37B2D /* LoginCompletion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginCompletion.swift; sourceTree = "<group>"; };
 		40DC6A112903C5FA00B37B2D /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		40DC6A132903CA7800B37B2D /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
+		40DC6A152903E82700B37B2D /* TokenStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenStorage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +93,7 @@
 				40DC6A0F2903C5C200B37B2D /* LoginCompletion.swift */,
 				40DC6A112903C5FA00B37B2D /* Model.swift */,
 				40DC6A132903CA7800B37B2D /* Network.swift */,
+				40DC6A152903E82700B37B2D /* TokenStorage.swift */,
 			);
 			path = AsyncDemo;
 			sourceTree = "<group>";
@@ -206,6 +209,7 @@
 				40DC6A122903C5FA00B37B2D /* Model.swift in Sources */,
 				403656F228FDA7C50023BEDB /* LoginViewController.swift in Sources */,
 				40DC6A142903CA7800B37B2D /* Network.swift in Sources */,
+				40DC6A162903E82700B37B2D /* TokenStorage.swift in Sources */,
 				403656EE28FDA7C50023BEDB /* AppDelegate.swift in Sources */,
 				403656F028FDA7C50023BEDB /* SceneDelegate.swift in Sources */,
 				40DC6A102903C5C200B37B2D /* LoginCompletion.swift in Sources */,

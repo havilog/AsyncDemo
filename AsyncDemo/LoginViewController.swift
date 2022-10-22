@@ -25,6 +25,7 @@ final class LoginViewController: UIViewController {
     }()
     
     internal let network: NetworkMockable = NetworkMock()
+    internal let tokenStorage: TokenSavable = TokenStorage() 
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,4 +71,3 @@ final class LoginViewController: UIViewController {
 }
 
 extension LoginViewController: HaviLoginable { }
-extension LoginViewController: TokenSavable { }

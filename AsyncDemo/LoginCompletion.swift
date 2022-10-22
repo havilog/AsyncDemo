@@ -9,6 +9,7 @@ import Foundation
 
 protocol HaviLoginable {
     var network: NetworkMockable { get }
+    var tokenStorage: TokenSavable { get }
     func login(completion: @escaping (Result<Void, Error>) -> Void)
     func kakaoLogin(
         dispatchGroup: DispatchGroup,
@@ -61,7 +62,9 @@ extension HaviLoginable {
             ) { result in
                 switch result {
                 case let .success(haviToken):
-                    completion(.success(()))
+                    tokenStorage.save(token: haviToken) { result in
+                        completion(result)
+                    }
                 case let .failure(error):
                     completion(.failure(error))
                 }
@@ -114,15 +117,5 @@ extension HaviLoginable {
         ) { result in 
             completion(result)
         }
-    }
-}
-
-protocol TokenSavable {
-    func save(token: HaviToken, completion: @escaping (Result<Void, Error>) -> Void)
-}
-
-extension TokenSavable {
-    func save(token: HaviToken, completion: @escaping (Result<Void, Error>) -> Void) {
-        fatalError("발급 받은 토큰을 저장한다.")
     }
 }
