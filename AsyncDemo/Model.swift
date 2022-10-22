@@ -20,3 +20,9 @@ struct HaviToken: Decodable {
     let accessToken: String
     let refreshToken: String
 }
+
+enum Endpoint {
+    case kakaoToken
+    case register
+    case haviToken
+}
