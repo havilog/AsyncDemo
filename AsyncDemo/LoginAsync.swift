@@ -9,7 +9,7 @@ import Foundation
 
 protocol HaviAsyncLoginable {
     var network: NetworkMockable { get }
-    var tokenStorage: TokenSavable { get }
+    var tokenStorage: TokenAsyncSavable { get }
     func login() async throws 
     func kakaoLogin() async throws -> KakaoToken
     func haviRegister() async throws -> HaviRegister
@@ -25,16 +25,19 @@ extension HaviAsyncLoginable {
     }
     
     func kakaoLogin() async throws -> KakaoToken {
+        defer { print(#function) }
         let kakaoToken = try await network.fetch(endpoint: .kakaoToken, mock: KakaoToken.init(accessToken: "", refreshToken: ""), delay: NSEC_PER_SEC)
         return kakaoToken
     }
     
     func haviRegister() async throws -> HaviRegister {
+        defer { print(#function) }
         let haviRegister = try await network.fetch(endpoint: .register, mock: HaviRegister.init(user: ""), delay: NSEC_PER_SEC * 2)
         return haviRegister
     }
     
     func haviLogin(kakaoToken: KakaoToken, haviRegister: HaviRegister) async throws -> HaviToken {
+        print("havi login start")
         let haviToken = try await network.fetch(endpoint: .haviToken, mock: HaviToken(accessToken: "", refreshToken: ""), delay: NSEC_PER_SEC)
         return haviToken
     }

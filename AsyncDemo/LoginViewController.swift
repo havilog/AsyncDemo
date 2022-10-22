@@ -25,7 +25,7 @@ final class LoginViewController: UIViewController {
     }()
     
     internal let network: NetworkMockable = NetworkMock()
-    internal let tokenStorage: TokenSavable = TokenStorage() 
+    internal let tokenStorage: TokenAsyncSavable = TokenStorage() 
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,18 +56,27 @@ final class LoginViewController: UIViewController {
     }
     
     @objc
-    private func login() {
-        login { [weak self] result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success:
-                    self?.textLabel.text = "성공"
-                case .failure:
-                    self?.textLabel.text = "실패"
-                }
+    internal func login() {
+//        login { [weak self] result in
+//            DispatchQueue.main.async {
+//                switch result {
+//                case .success:
+//                    self?.textLabel.text = "성공"
+//                case .failure:
+//                    self?.textLabel.text = "실패"
+//                }
+//            }
+//        }
+        Task { @MainActor in
+            do {
+                try await login()
+                textLabel.text = "성공"
+            }
+            catch {
+                textLabel.text = "실패"
             }
         }
     } 
 }
 
-extension LoginViewController: HaviLoginable { }
+extension LoginViewController: HaviAsyncLoginable { }
