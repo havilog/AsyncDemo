@@ -10,14 +10,14 @@ import Foundation
 protocol HaviAsyncLoginable {
     var network: NetworkMockable { get }
     var tokenStorage: TokenAsyncSavable { get }
-    func login() async throws 
+    func loginAsync() async throws 
     func kakaoLogin() async throws -> KakaoToken
     func haviRegister() async throws -> HaviRegister
     func haviLogin(kakaoToken: KakaoToken, haviRegister: HaviRegister) async throws -> HaviToken
 }
 
 extension HaviAsyncLoginable {
-    func login() async throws {
+    func loginAsync() async throws {
         async let kakaoToken = try await kakaoLogin()
         async let haviRegister = try await haviRegister()
         let haviToken = try await haviLogin(kakaoToken: kakaoToken, haviRegister: haviRegister)

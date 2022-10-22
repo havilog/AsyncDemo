@@ -20,6 +20,7 @@
 		40DC6A192903F9FF00B37B2D /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 40DC6A182903F9FF00B37B2D /* RxCocoa */; };
 		40DC6A1B2903F9FF00B37B2D /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 40DC6A1A2903F9FF00B37B2D /* RxSwift */; };
 		40DC6A1D2903FB3C00B37B2D /* LoginAsync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40DC6A1C2903FB3C00B37B2D /* LoginAsync.swift */; };
+		40DC6A1F2904069400B37B2D /* LoginRxSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40DC6A1E2904069400B37B2D /* LoginRxSwift.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		40DC6A132903CA7800B37B2D /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		40DC6A152903E82700B37B2D /* TokenStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenStorage.swift; sourceTree = "<group>"; };
 		40DC6A1C2903FB3C00B37B2D /* LoginAsync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginAsync.swift; sourceTree = "<group>"; };
+		40DC6A1E2904069400B37B2D /* LoginRxSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRxSwift.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +103,7 @@
 				40DC6A112903C5FA00B37B2D /* Model.swift */,
 				40DC6A132903CA7800B37B2D /* Network.swift */,
 				40DC6A152903E82700B37B2D /* TokenStorage.swift */,
+				40DC6A1E2904069400B37B2D /* LoginRxSwift.swift */,
 			);
 			path = AsyncDemo;
 			sourceTree = "<group>";
@@ -226,6 +229,7 @@
 				40DC6A142903CA7800B37B2D /* Network.swift in Sources */,
 				40DC6A162903E82700B37B2D /* TokenStorage.swift in Sources */,
 				403656EE28FDA7C50023BEDB /* AppDelegate.swift in Sources */,
+				40DC6A1F2904069400B37B2D /* LoginRxSwift.swift in Sources */,
 				403656F028FDA7C50023BEDB /* SceneDelegate.swift in Sources */,
 				40DC6A102903C5C200B37B2D /* LoginCompletion.swift in Sources */,
 			);

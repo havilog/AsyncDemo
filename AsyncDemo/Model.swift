@@ -12,13 +12,25 @@ struct KakaoToken: Decodable {
     let refreshToken: String
 }
 
+extension KakaoToken {
+    static var mock: Self = .init(accessToken: "havi_access_token", refreshToken: "havi_refresh_token")
+}
+
 struct HaviRegister: Decodable {
     let user: String
+}
+
+extension HaviRegister {
+    static var mock: Self = .init(user: "havi.log")
 }
 
 struct HaviToken: Decodable {
     let accessToken: String
     let refreshToken: String
+}
+
+extension HaviToken {
+    static var mock: Self = .init(accessToken: "havi_access_token", refreshToken: "havi_refresh_token")
 }
 
 enum Endpoint {

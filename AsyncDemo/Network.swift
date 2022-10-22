@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import RxSwift
 
 protocol NetworkMockable {
     func fetch<Model: Decodable>(
@@ -20,6 +21,12 @@ protocol NetworkMockable {
         mock: Model,
         delay: UInt64
     ) async throws -> Model
+    
+    func fetch<Model: Decodable>(
+        endpoint: Endpoint,
+        mock: Model,
+        delay: DispatchTime
+    ) -> Observable<Model> 
 }
 
 extension NetworkMockable {
@@ -41,6 +48,26 @@ extension NetworkMockable {
     ) async throws -> Model {
         try await Task.sleep(nanoseconds: delay)
         return mock
+    }
+    
+    func fetch<Model: Decodable>(
+        endpoint: Endpoint,
+        mock: Model,
+        delay: DispatchTime
+    ) -> Observable<Model> {
+        return .create { observer in
+            self.fetch(endpoint: endpoint, mock: mock, delay: delay) { result in
+                switch result {
+                case let .success(model):
+                    observer.onNext(model)
+                    observer.onCompleted()
+                    
+                case let .failure(error):
+                    observer.onError(error)
+                }
+            }    
+            return Disposables.create()
+        }
     }
 }
 

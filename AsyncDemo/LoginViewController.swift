@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 final class LoginViewController: UIViewController {
     
@@ -25,7 +27,10 @@ final class LoginViewController: UIViewController {
     }()
     
     internal let network: NetworkMockable = NetworkMock()
-    internal let tokenStorage: TokenAsyncSavable = TokenStorage() 
+//    let tokenStorage: TokenSavable = TokenStorage()
+//    internal let tokenStorage: TokenAsyncSavable = TokenActorStorage() 
+    let tokenStorage: TokenRxSaveble = TokenRxStorage()
+    private let disposeBag: DisposeBag = .init()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,16 +72,26 @@ final class LoginViewController: UIViewController {
 //                }
 //            }
 //        }
-        Task { @MainActor in
-            do {
-                try await login()
-                textLabel.text = "성공"
+//        Task { @MainActor in
+//            do {
+//                try await loginAsync()
+//                textLabel.text = "성공"
+//            }
+//            catch {
+//                textLabel.text = "실패"
+//            }
+//        }
+        loginRxSwift()
+            .subscribe { [weak self] _ in
+                self?.textLabel.text = "성공"
+            } onError: { [weak self] error in
+                self?.textLabel.text = "실패"
             }
-            catch {
-                textLabel.text = "실패"
-            }
-        }
+            .disposed(by: disposeBag)
+
     } 
 }
 
-extension LoginViewController: HaviAsyncLoginable { }
+//extension LoginViewController: HaviLoginable { }
+//extension LoginViewController: HaviAsyncLoginable { }
+extension LoginViewController: HaviRxLoginable { }
