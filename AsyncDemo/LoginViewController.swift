@@ -9,6 +9,8 @@ import UIKit
 
 final class LoginViewController: UIViewController {
     
+    // MARK: UI Property
+    
     private let loginButton: UIButton = {
         let button: UIButton = .init(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -27,11 +29,15 @@ final class LoginViewController: UIViewController {
         return label
     }()
     
+    // MARK: LifeCycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         bind()
     }
+    
+    // MARK: UI Configure
     
     private func configureUI() {
         view.backgroundColor = .white
@@ -50,6 +56,8 @@ final class LoginViewController: UIViewController {
             textLabel.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 50)
         ])
     }
+    
+    // MARK: Bind
     
     private func bind() {
         loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
