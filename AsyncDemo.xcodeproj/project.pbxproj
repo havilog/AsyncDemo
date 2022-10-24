@@ -13,6 +13,11 @@
 		403656F728FDA7C70023BEDB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 403656F628FDA7C70023BEDB /* Assets.xcassets */; };
 		403656FA28FDA7C70023BEDB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 403656F828FDA7C70023BEDB /* LaunchScreen.storyboard */; };
 		4036570528FDA7C70023BEDB /* AsyncDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4036570428FDA7C70023BEDB /* AsyncDemoTests.swift */; };
+		40DC6A212906AB9C00B37B2D /* Loginable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40DC6A202906AB9C00B37B2D /* Loginable.swift */; };
+		40DC6A232906AC4000B37B2D /* HaviNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40DC6A222906AC4000B37B2D /* HaviNetwork.swift */; };
+		40DC6A252906AD3400B37B2D /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40DC6A242906AD3400B37B2D /* Model.swift */; };
+		40DC6A272906B15300B37B2D /* AsyncLoginable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40DC6A262906B15300B37B2D /* AsyncLoginable.swift */; };
+		40DC6A292906B49E00B37B2D /* TokenStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40DC6A282906B49E00B37B2D /* TokenStorage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +40,11 @@
 		403656FB28FDA7C70023BEDB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4036570028FDA7C70023BEDB /* AsyncDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AsyncDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4036570428FDA7C70023BEDB /* AsyncDemoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncDemoTests.swift; sourceTree = "<group>"; };
+		40DC6A202906AB9C00B37B2D /* Loginable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loginable.swift; sourceTree = "<group>"; };
+		40DC6A222906AC4000B37B2D /* HaviNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HaviNetwork.swift; sourceTree = "<group>"; };
+		40DC6A242906AD3400B37B2D /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		40DC6A262906B15300B37B2D /* AsyncLoginable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncLoginable.swift; sourceTree = "<group>"; };
+		40DC6A282906B49E00B37B2D /* TokenStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenStorage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +92,11 @@
 				403656F628FDA7C70023BEDB /* Assets.xcassets */,
 				403656F828FDA7C70023BEDB /* LaunchScreen.storyboard */,
 				403656FB28FDA7C70023BEDB /* Info.plist */,
+				40DC6A202906AB9C00B37B2D /* Loginable.swift */,
+				40DC6A222906AC4000B37B2D /* HaviNetwork.swift */,
+				40DC6A242906AD3400B37B2D /* Model.swift */,
+				40DC6A262906B15300B37B2D /* AsyncLoginable.swift */,
+				40DC6A282906B49E00B37B2D /* TokenStorage.swift */,
 			);
 			path = AsyncDemo;
 			sourceTree = "<group>";
@@ -197,6 +212,11 @@
 				403656F228FDA7C50023BEDB /* LoginViewController.swift in Sources */,
 				403656EE28FDA7C50023BEDB /* AppDelegate.swift in Sources */,
 				403656F028FDA7C50023BEDB /* SceneDelegate.swift in Sources */,
+				40DC6A292906B49E00B37B2D /* TokenStorage.swift in Sources */,
+				40DC6A252906AD3400B37B2D /* Model.swift in Sources */,
+				40DC6A232906AC4000B37B2D /* HaviNetwork.swift in Sources */,
+				40DC6A212906AB9C00B37B2D /* Loginable.swift in Sources */,
+				40DC6A272906B15300B37B2D /* AsyncLoginable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
