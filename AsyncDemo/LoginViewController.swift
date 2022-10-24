@@ -10,10 +10,13 @@ import UIKit
 final class LoginViewController: UIViewController {
     
     private let loginButton: UIButton = {
-        let button: UIButton = .init(frame: .zero)
+        let button: UIButton = .init(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.layer.borderColor = UIColor.systemBlue.cgColor
+        button.layer.borderWidth = 1
+        button.layer.cornerRadius = 15
+        button.clipsToBounds = true
         button.setTitle("로그인 버튼", for: .init())
-        button.setTitleColor(.black, for: .init())
         return button
     }()
     
@@ -27,6 +30,7 @@ final class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        bind()
     }
     
     private func configureUI() {
@@ -43,7 +47,16 @@ final class LoginViewController: UIViewController {
         view.addSubview(textLabel)
         NSLayoutConstraint.activate([
             textLabel.centerXAnchor.constraint(equalTo: loginButton.centerXAnchor),
-            textLabel.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 10)
+            textLabel.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 50)
         ])
+    }
+    
+    private func bind() {
+        loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc
+    private func loginButtonTapped() {
+        // TODO: 구현
     }
 }
